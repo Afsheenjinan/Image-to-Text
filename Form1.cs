@@ -72,47 +72,41 @@ public partial class baseForm : Form
     {
         if (image == null) return;
 
+        output.Clear();
+
         string line = "";
-        Color pixel;
         float brightness;
-
-        int val = 0;
-
-        Console.WriteLine(image.Height);
-        Console.WriteLine(image.Width);
-        Console.WriteLine(imageFileName);
 
         for (int y = 0; y < image.Height; y++)
         {
             for (int x = 0; x < image.Width; x++)
             {
-                pixel = image.GetPixel(x, y);
-                brightness = pixel.GetBrightness();
-                val = (int)Math.Round(map(brightness, 0, 1, 0, characters.Length - 1));
-                line += characters[val];
+                brightness = image.GetPixel(x, y).GetBrightness();
+                line += characters[(int)Math.Round(map(brightness, 0, 1, 0, characters.Length - 1))];
             }
-
-            line += "\n";
-            output.AppendText(line);
-            // output.Text += text;
-            // text = "\n";
-            // text += "\n";
+            output.AppendText(line + "\n");
+            line = "";
         }
 
 
         // This text is added only once to the file.
         int ext = 1;
-        if (!File.Exists($"{imageFileName}.txt"))
+
+        string outputPath = @"./output/" + imageFileName;
+
+        if (!Directory.Exists("output")) Directory.CreateDirectory("output");
+
+        if (!File.Exists($"{outputPath}.txt"))
         {
-
-            File.WriteAllText($"{imageFileName}.txt", output.Text);
+            Console.WriteLine("Path NOT exist");
+            File.WriteAllText($"{outputPath}.txt", output.Text);
             return;
-
         }
 
-        while (File.Exists($"{imageFileName}{ext}.txt")) ext++;
+        Console.WriteLine("Path exist");
+        while (File.Exists($"{outputPath} ({ext}).txt")) ext++;
 
-        File.WriteAllText($"{imageFileName}{ext}.txt", output.Text);
+        File.WriteAllText($"{outputPath} ({ext}).txt", output.Text);
 
     }
 
@@ -129,9 +123,7 @@ public partial class baseForm : Form
 
         Bitmap displayImage = resizeImage(image, new Size(100, 100));
 
-        float h = image.HorizontalResolution;
-        float v = image.VerticalResolution;
-        Console.WriteLine("{0}, {1}", h, v);
+        Console.WriteLine($"{image.HorizontalResolution}, {image.VerticalResolution}");
         Console.WriteLine(image.Height);
         Console.WriteLine(image.Width);
         Console.WriteLine(image.PixelFormat);
