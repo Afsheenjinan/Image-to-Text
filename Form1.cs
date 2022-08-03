@@ -28,6 +28,9 @@ public partial class baseForm : Form
         // panelB.BorderStyle = BorderStyle.FixedSingle;
         panelB.Anchor = (AnchorStyles.Bottom);
 
+        panelT.Location = new Point(0, 0);
+        panelT.Size = new Size(ClientSize.Width, 9 * ClientSize.Height / 10);
+        panelT.Anchor = (AnchorStyles.Top);
         // { get; set; }
         label.Text = "Select Image";
         label.Location = new Point(panelB.Width / 2 - label.Width - 50, panelB.Height / 2 - label.Height / 2);
@@ -44,7 +47,7 @@ public partial class baseForm : Form
         // box.SizeMode = PictureBoxSizeMode.AutoSize; //CenterImage
         box.Size = new Size(720, 480);
         box.Location = new Point(0, 0);
-        Controls.Add(box);
+        panelT.Controls.Add(box);
 
         convertButton.Text = "Convert >>";
         convertButton.Height = 32;
@@ -54,7 +57,7 @@ public partial class baseForm : Form
         convertButton.Click += new EventHandler(convertToText);
         panelB.Controls.Add(convertButton);
 
-        output.Size = new Size(720, 480);
+        output.Size = new Size(5000, 1080);
         output.Location = new Point(720, 0);
         output.AutoSize = true;
         output.Multiline = true;
@@ -62,10 +65,11 @@ public partial class baseForm : Form
         output.ScrollBars = ScrollBars.Both;
         output.ReadOnly = true;
         output.PlaceholderText = "The Text Appears Here";
-        output.Font = new Font(FontFamily.GenericMonospace, 3);
+        output.Font = new Font(FontFamily.GenericMonospace, 2);
         // output.Font = new Font("Consolas", 3);
-        Controls.Add(output);
+        panelT.Controls.Add(output);
         Controls.Add(panelB);
+        Controls.Add(panelT);
     }
 
     private void convertToText(object? sender, EventArgs e)
@@ -89,21 +93,16 @@ public partial class baseForm : Form
         }
 
 
-        // This text is added only once to the file.
-        int ext = 1;
-
         string outputPath = @"./output/" + imageFileName;
-
         if (!Directory.Exists("output")) Directory.CreateDirectory("output");
 
         if (!File.Exists($"{outputPath}.txt"))
         {
-            Console.WriteLine("Path NOT exist");
             File.WriteAllText($"{outputPath}.txt", output.Text);
             return;
         }
 
-        Console.WriteLine("Path exist");
+        int ext = 1;
         while (File.Exists($"{outputPath} ({ext}).txt")) ext++;
 
         File.WriteAllText($"{outputPath} ({ext}).txt", output.Text);
@@ -120,7 +119,6 @@ public partial class baseForm : Form
         if (dialogResult != DialogResult.OK) return;
         imageFileName = fileDialog.SafeFileName.Split('.')[0];
         image = new Bitmap(fileDialog.FileName);
-
         Bitmap displayImage = resizeImage(image, new Size(100, 100));
 
         Console.WriteLine($"{image.HorizontalResolution}, {image.VerticalResolution}");
@@ -131,23 +129,18 @@ public partial class baseForm : Form
         box.Image = image;
     }
 
-    // public static async Task WriteToFile(string text) => await File.WriteAllTextAsync("WriteText.txt", text);
-
     private static double map(double value, double fromLow, double fromHigh, double toLow, double toHigh) => (value - fromLow) * (toHigh - toLow) / (fromHigh - fromLow) + toLow;
 
-    private static Bitmap resizeImage(Image original, Size size)
+    private static Bitmap resizeImage(Image sourceImage, Size size)
     {
-        int width = original.Width, height = original.Height;
+        int width = sourceImage.Width, height = sourceImage.Height;
 
         Bitmap bitmap = new Bitmap(size.Width, size.Height);
-
         Graphics graphics = Graphics.FromImage(bitmap);
         graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-        graphics.DrawImage(original, 0, 0, size.Width, size.Height);
+        graphics.DrawImage(sourceImage, 0, 0, size.Width, size.Height);
         graphics.Dispose();
-        // return (Image)bitmap;
         return bitmap;
-
     }
 }
 
