@@ -1,0 +1,15 @@
+D:\Code\C-Sharp\Image to Text\bin\Debug\net6.0-windows\Image to Text.exe
+D:\Code\C-Sharp\Image to Text\bin\Debug\net6.0-windows\Image to Text.deps.json
+D:\Code\C-Sharp\Image to Text\bin\Debug\net6.0-windows\Image to Text.runtimeconfig.json
+D:\Code\C-Sharp\Image to Text\bin\Debug\net6.0-windows\Image to Text.dll
+D:\Code\C-Sharp\Image to Text\bin\Debug\net6.0-windows\Image to Text.pdb
+D:\Code\C-Sharp\Image to Text\obj\Debug\net6.0-windows\Image to Text.csproj.AssemblyReference.cache
+D:\Code\C-Sharp\Image to Text\obj\Debug\net6.0-windows\Image to Text.GeneratedMSBuildEditorConfig.editorconfig
+D:\Code\C-Sharp\Image to Text\obj\Debug\net6.0-windows\Image to Text.AssemblyInfoInputs.cache
+D:\Code\C-Sharp\Image to Text\obj\Debug\net6.0-windows\Image to Text.AssemblyInfo.cs
+D:\Code\C-Sharp\Image to Text\obj\Debug\net6.0-windows\Image to Text.csproj.CoreCompileInputs.cache
+D:\Code\C-Sharp\Image to Text\obj\Debug\net6.0-windows\Image to Text.dll
+D:\Code\C-Sharp\Image to Text\obj\Debug\net6.0-windows\refint\Image to Text.dll
+D:\Code\C-Sharp\Image to Text\obj\Debug\net6.0-windows\Image to Text.pdb
+D:\Code\C-Sharp\Image to Text\obj\Debug\net6.0-windows\Image to Text.genruntimeconfig.cache
+D:\Code\C-Sharp\Image to Text\obj\Debug\net6.0-windows\ref\Image to Text.dll
