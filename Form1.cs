@@ -10,7 +10,8 @@ public partial class baseForm : Form
     Button convertButton = new Button();
     PictureBox imageBox = new PictureBox();
     // Label output = new Label();
-    TextBox textOutput = new TextBox();
+    TextBox textInput = new TextBox();
+    RichTextBox textOutput = new RichTextBox();
 
     // Bitmap? image;
 
@@ -47,6 +48,11 @@ public partial class baseForm : Form
         openButton.TabStop = true;
         openButton.Click += new EventHandler(button_Click);
 
+        textInput.Text = characters;
+        textInput.Height = 32;
+        textInput.Width = 256;
+        textInput.Location = new Point(panelB.Width / 2 + textInput.Width / 2, panelB.Height / 2 - textInput.Height / 2);
+
         convertButton.Text = "Convert -->";
         convertButton.AutoSize = true;
         convertButton.Height = 32;
@@ -69,19 +75,30 @@ public partial class baseForm : Form
         textOutput.WordWrap = false;
         textOutput.ReadOnly = true;
         // textOutput.TextAlign = HorizontalAlignment.Center;
-        textOutput.ScrollBars = ScrollBars.Both;
-        textOutput.PlaceholderText = "The Text Appears Here";
+        textOutput.ScrollBars = RichTextBoxScrollBars.Both;
+        textOutput.ZoomFactor = 2.0f;
+        // textOutput.PlaceholderText = "The Text Appears Here";
         // output.Font = new Font(FontFamily.GenericMonospace, 8);
         textOutput.Font = new Font("Consolas", 4);
         textOutput.Anchor = (AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Left);
 
         panelB.Controls.Add(label);
         panelB.Controls.Add(openButton);
+        panelB.Controls.Add(textInput);
         panelB.Controls.Add(convertButton);
         panelT.Controls.Add(imageBox);
         panelT.Controls.Add(textOutput);
         Controls.Add(panelT);
         Controls.Add(panelB);
+
+        string txt = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`-=[];',./~!@#$%^&*()_+|}{:\" ?>< 123456789";
+        string word = txt + Environment.NewLine;
+        for (int i = 1; i < txt.Length; i++)
+        {
+            word += txt.Substring(i, txt.Length - 1) + txt.Substring(0, i) + Environment.NewLine;
+
+        }
+        Console.WriteLine(word);
     }
 
     private void convertToText(object? sender, EventArgs e)
@@ -94,13 +111,14 @@ public partial class baseForm : Form
 
         string line = "";
         float brightness;
+        string a_z = textInput.Text; // characters
 
         for (int y = 0; y < image.Height; y++)
         {
             for (int x = 0; x < image.Width; x++)
             {
                 brightness = image.GetPixel(x, y).GetBrightness();
-                line += characters[(int)Math.Round(map(brightness, 0, 1, 0, characters.Length - 1))] + " ";
+                line += a_z[(int)Math.Round(map(brightness, 0, 1, 0, a_z.Length - 1))] + " ";
             }
             textOutput.AppendText(line + Environment.NewLine);
             line = "";
