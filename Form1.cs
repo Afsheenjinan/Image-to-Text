@@ -64,15 +64,15 @@ public partial class baseForm : Form
 
         textOutput.Location = new Point(ClientSize.Width / 2, 0);
         textOutput.Size = new Size(ClientSize.Width / 2, 9 * ClientSize.Height / 10);
-        textOutput.AutoSize = true;
+        // textOutput.AutoSize = false;
         textOutput.Multiline = true;
-        textOutput.WordWrap = true;
-        textOutput.ScrollBars = ScrollBars.Both;
+        textOutput.WordWrap = false;
         textOutput.ReadOnly = true;
-        textOutput.TextAlign = HorizontalAlignment.Center;
+        // textOutput.TextAlign = HorizontalAlignment.Center;
+        textOutput.ScrollBars = ScrollBars.Both;
         textOutput.PlaceholderText = "The Text Appears Here";
         // output.Font = new Font(FontFamily.GenericMonospace, 8);
-        textOutput.Font = new Font("Consolas", 8);
+        textOutput.Font = new Font("Consolas", 4);
         textOutput.Anchor = (AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Left);
 
         panelB.Controls.Add(label);
@@ -100,9 +100,9 @@ public partial class baseForm : Form
             for (int x = 0; x < image.Width; x++)
             {
                 brightness = image.GetPixel(x, y).GetBrightness();
-                line += characters[(int)Math.Round(map(brightness, 0, 1, 0, characters.Length - 1))];
+                line += characters[(int)Math.Round(map(brightness, 0, 1, 0, characters.Length - 1))] + " ";
             }
-            textOutput.AppendText(line + "\n");
+            textOutput.AppendText(line + Environment.NewLine);
             line = "";
         }
 
