@@ -8,13 +8,15 @@ public partial class baseForm : Form
     Label label = new Label();
     Button openButton = new Button();
     Button convertButton = new Button();
-    PictureBox box = new PictureBox();
+    PictureBox imageBox = new PictureBox();
     // Label output = new Label();
-    TextBox output = new TextBox();
+    TextBox textOutput = new TextBox();
 
-    Bitmap? image;
+    // Bitmap? image;
 
-    string imageFileName = "";
+    Picture? picture;
+
+    // string imageFileName = "";
 
     // string characters = "   .,-_/|+*cabILOPSANM";
     string characters = "MNASPOLIbac*+|/_-,.   ";
@@ -23,18 +25,20 @@ public partial class baseForm : Form
     {
         InitializeComponent();
 
-        panelB.Location = new Point(0, 9 * ClientSize.Height / 10);
-        panelB.Size = new Size(ClientSize.Width, ClientSize.Height / 10);
-        // panelB.BorderStyle = BorderStyle.FixedSingle;
-        panelB.Anchor = (AnchorStyles.Bottom);
 
         panelT.Location = new Point(0, 0);
         panelT.Size = new Size(ClientSize.Width, 9 * ClientSize.Height / 10);
         panelT.Anchor = (AnchorStyles.Top);
-        // { get; set; }
+        panelT.BorderStyle = BorderStyle.FixedSingle;
+        panelT.Anchor = (AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Left);
+
+        panelB.Location = new Point(0, 9 * ClientSize.Height / 10);
+        panelB.Size = new Size(ClientSize.Width, ClientSize.Height / 10);
+        panelB.BorderStyle = BorderStyle.FixedSingle;
+        panelB.Anchor = (AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Left);
+
         label.Text = "Select Image";
         label.Location = new Point(panelB.Width / 2 - label.Width - 50, panelB.Height / 2 - label.Height / 2);
-        panelB.Controls.Add(label);
 
         openButton.Text = "Open";
         openButton.Height = 32;
@@ -42,41 +46,51 @@ public partial class baseForm : Form
         openButton.TabIndex = 1;
         openButton.TabStop = true;
         openButton.Click += new EventHandler(button_Click);
-        panelB.Controls.Add(openButton);
 
-        // box.SizeMode = PictureBoxSizeMode.AutoSize; //CenterImage
-        box.Size = new Size(720, 480);
-        box.Location = new Point(0, 0);
-        panelT.Controls.Add(box);
-
-        convertButton.Text = "Convert >>";
+        convertButton.Text = "Convert -->";
+        convertButton.AutoSize = true;
         convertButton.Height = 32;
         convertButton.Location = new Point(panelB.Width - convertButton.Width - 35, panelB.Height / 2 - convertButton.Height / 2);
         convertButton.TabIndex = 2;
         convertButton.TabStop = true;
         convertButton.Click += new EventHandler(convertToText);
-        panelB.Controls.Add(convertButton);
 
-        output.Size = new Size(5000, 1080);
-        output.Location = new Point(720, 0);
-        output.AutoSize = true;
-        output.Multiline = true;
-        output.WordWrap = false;
-        output.ScrollBars = ScrollBars.Both;
-        output.ReadOnly = true;
-        output.PlaceholderText = "The Text Appears Here";
-        output.Font = new Font(FontFamily.GenericMonospace, 2);
-        // output.Font = new Font("Consolas", 3);
-        panelT.Controls.Add(output);
-        Controls.Add(panelB);
+        // box.SizeMode = PictureBoxSizeMode.AutoSize; //CenterImage
+        imageBox.Location = new Point(0, 0);
+        imageBox.Size = new Size(ClientSize.Width / 2, 9 * ClientSize.Height / 10);
+        imageBox.SizeMode = PictureBoxSizeMode.CenterImage;
+        imageBox.BorderStyle = BorderStyle.FixedSingle;
+        imageBox.Anchor = (AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left);
+
+        textOutput.Location = new Point(ClientSize.Width / 2, 0);
+        textOutput.Size = new Size(ClientSize.Width / 2, 9 * ClientSize.Height / 10);
+        textOutput.AutoSize = true;
+        textOutput.Multiline = true;
+        textOutput.WordWrap = true;
+        textOutput.ScrollBars = ScrollBars.Both;
+        textOutput.ReadOnly = true;
+        textOutput.TextAlign = HorizontalAlignment.Center;
+        textOutput.PlaceholderText = "The Text Appears Here";
+        // output.Font = new Font(FontFamily.GenericMonospace, 8);
+        textOutput.Font = new Font("Consolas", 8);
+        textOutput.Anchor = (AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Left);
+
+        panelB.Controls.Add(label);
+        panelB.Controls.Add(openButton);
+        panelB.Controls.Add(convertButton);
+        panelT.Controls.Add(imageBox);
+        panelT.Controls.Add(textOutput);
         Controls.Add(panelT);
+        Controls.Add(panelB);
     }
 
     private void convertToText(object? sender, EventArgs e)
     {
-        if (image == null) return;
+        if (picture == null) return;
 
-        output.Clear();
+        Bitmap image = picture.bitmap;
+
+        textOutput.Clear();
 
         string line = "";
         float brightness;
@@ -88,24 +102,24 @@ public partial class baseForm : Form
                 brightness = image.GetPixel(x, y).GetBrightness();
                 line += characters[(int)Math.Round(map(brightness, 0, 1, 0, characters.Length - 1))];
             }
-            output.AppendText(line + "\n");
+            textOutput.AppendText(line + "\n");
             line = "";
         }
 
 
-        string outputPath = @"./output/" + imageFileName;
+        string outputPath = @"./output/" + picture.fileName;
         if (!Directory.Exists("output")) Directory.CreateDirectory("output");
 
         if (!File.Exists($"{outputPath}.txt"))
         {
-            File.WriteAllText($"{outputPath}.txt", output.Text);
+            File.WriteAllText($"{outputPath}.txt", textOutput.Text);
             return;
         }
 
         int ext = 1;
         while (File.Exists($"{outputPath} ({ext}).txt")) ext++;
 
-        File.WriteAllText($"{outputPath} ({ext}).txt", output.Text);
+        File.WriteAllText($"{outputPath} ({ext}).txt", textOutput.Text);
 
     }
 
@@ -113,12 +127,14 @@ public partial class baseForm : Form
     {
 
         OpenFileDialog fileDialog = new OpenFileDialog();
-        fileDialog.Filter = "Image Files(*.png; *.jpg; *.jpeg; *.gif; *.bmp)|*.png; *.jpg; *.jpeg; *.gif; *.bmp";
+        fileDialog.Filter = "Image Files (*.png; *.jpg; *.jpeg;)|*.png; *.jpg; *.jpeg;";
         DialogResult dialogResult = fileDialog.ShowDialog();
 
         if (dialogResult != DialogResult.OK) return;
-        imageFileName = fileDialog.SafeFileName.Split('.')[0];
-        image = new Bitmap(fileDialog.FileName);
+        string imageFileName = fileDialog.SafeFileName.Split('.')[0];
+        Bitmap image = new Bitmap(fileDialog.FileName);
+
+        picture = new Picture(image, imageFileName);
         Bitmap displayImage = resizeImage(image, new Size(100, 100));
 
         Console.WriteLine($"{image.HorizontalResolution}, {image.VerticalResolution}");
@@ -126,7 +142,7 @@ public partial class baseForm : Form
         Console.WriteLine(image.Width);
         Console.WriteLine(image.PixelFormat);
 
-        box.Image = image;
+        imageBox.Image = image;
     }
 
     private static double map(double value, double fromLow, double fromHigh, double toLow, double toHigh) => (value - fromLow) * (toHigh - toLow) / (fromHigh - fromLow) + toLow;
@@ -142,6 +158,28 @@ public partial class baseForm : Form
         graphics.Dispose();
         return bitmap;
     }
+
+    class Picture
+    {
+        public Bitmap bitmap;
+        public Size size;
+        public string fileName;
+        public double horizontalResolution;
+        public double verticalResolution;
+
+        public int width { get => size.Width; }
+        public int height { get => size.Height; }
+
+        public Picture(Bitmap image, string fileName)
+        {
+            this.bitmap = image;
+            this.fileName = fileName;
+            this.size = image.Size;
+            this.horizontalResolution = image.HorizontalResolution;
+            this.verticalResolution = image.VerticalResolution;
+        }
+    }
+
 }
 
 

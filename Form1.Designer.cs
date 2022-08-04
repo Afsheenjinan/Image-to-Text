@@ -32,6 +32,7 @@ partial class baseForm
         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         this.ClientSize = new System.Drawing.Size(1280, 720);
         this.MinimumSize = new System.Drawing.Size(1280, 720);
+        WindowState = FormWindowState.Maximized;
         this.Text = "Image Convertor";
     }
 
