@@ -1,9 +1,11 @@
 # Image-to-Text
 
- Convert Bitmap Image to Text Image
+ `Convert Bitmap Image to Text Image`
 
  ./text order/  -> Contains text intensity related files
+
  ./resources/  ->  Contains sample images
+
  ./output/   -> Output folder contains text
 
  The "line spacing" should be 0.5 for true size image
