@@ -13,3 +13,6 @@ D:\Code\C-Sharp\Image to Text\obj\Debug\net6.0-windows\refint\Image to Text.dll
 D:\Code\C-Sharp\Image to Text\obj\Debug\net6.0-windows\Image to Text.pdb
 D:\Code\C-Sharp\Image to Text\obj\Debug\net6.0-windows\Image to Text.genruntimeconfig.cache
 D:\Code\C-Sharp\Image to Text\obj\Debug\net6.0-windows\ref\Image to Text.dll
+D:\Code\C-Sharp\Image to Text\obj\Debug\net6.0-windows\Image_to_Text.baseForm.resources
+D:\Code\C-Sharp\Image to Text\obj\Debug\net6.0-windows\Image to Text.csproj.GenerateResource.cache
+D:\Code\C-Sharp\Image to Text\obj\Debug\net6.0-windows\Image_to_Text.Properties.Resources.resources
